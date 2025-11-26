@@ -1,0 +1,27 @@
+FROM registry.git.lab/cisco-devops/containers/python37:latest
+
+# metadata
+LABEL description="This is a net inventory flask application"
+LABEL maintainer="Cisco <noreply@cisco.com>"
+LABEL version="0.1"
+
+# copy files over to container
+ADD ./ /net_inventory
+
+# sets the working directory
+WORKDIR /net_inventory/
+
+# install system packages
+RUN apt install -y git vim
+
+# install python packages
+RUN pip install -r ./requirements.txt
+
+# set environment to development by default
+ENV ENV=DEVELOPMENT
+
+# doesn't actually do anything, just documentation purposes. forward your port at runtime
+EXPOSE 5000/tcp
+
+# start the application
+ENTRYPOINT python run.py
